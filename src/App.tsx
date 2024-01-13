@@ -14,15 +14,25 @@ function App() {
 
   const getCount = async () => {
     setMsg("Getting...");
-    const count = await remoteStorage.getItem("count").then((a) => a as number);
-    setMsg("Got!");
+    const count = await remoteStorage
+      .getItem("count")
+      .then((a) => {
+        setMsg("Got!");
+        return a as number;
+      })
+      .catch(() => {
+        setMsg("An error has occurred!");
+        return 0;
+      });
     return count;
   };
 
   const saveCount = async (count: number) => {
     setMsg("Saving...");
-    await remoteStorage.setItem("count", count);
-    setMsg("Saved!");
+    await remoteStorage
+      .setItem("count", count)
+      .then(() => setMsg("Saved!"))
+      .catch(() => setMsg("An error has occurred!"));
   };
 
   return (
